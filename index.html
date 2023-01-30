@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/blood.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<style>
+			.display-flex{
+				display: flex; justify-content: space-around;
+			}
+			.font-size_medium{
+				font-size: medium;
+			}
+			.border-server{
+				border: 1px solid;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			.client-section_3{
+				margin: 55px 125px;
+			}
+			.row-section_3{
+				display: flex; justify-content: center; margin-top: 20px;
+			}
+			.bold-span{
+				font-weight: bold;
+			}
+			ul>li, ol>li, .text{
+				font-size: smaller;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>JWT</h3>
+					<h5>(JSON Web Token)</h5>
+				</section>
+
+				<section>
+					<div class="display-flex">
+						<p>Client</p>
+
+						<div>
+							<div>→</div>
+							<div>
+								<div>←</div>
+								<div class="font-size_medium">id</div>
+								<div class="font-size_medium">cookie</div>
+							</div>
+						</div>
+
+						<div>
+							<div>Server</div>
+							<div>id{...}</div>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<div class="display-flex">
+						<div class="border-server">
+							<div>Auth</div>
+							<div class="font-size_medium">auth.foo.com</div>
+						</div>
+
+						<div>
+							&#8644;
+						</div>
+
+						<div class="border-server">
+							<div>API</div>
+							<div class="font-size_medium">api.bar.com</div>
+						</div>
+					</div>
+					<div class="row-section_3">
+						<div>&#10529;</div>
+						<div class="border-server client-section_3">Client</div>
+						<div>&#10530;</div>
+					</div>
+				</section>
+
+				<section>
+					<span>JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.</span>
+				</section>
+
+				<section>
+					<img data-src="./jwt.webp">
+				</section>
+
+				<section>
+					<h6>Header</h6>
+					<div>
+						<pre><code data-trim data-noescape>
+							{
+								"alg": "HS256",
+								"typ": "JWT"
+							}
+							</code></pre>
+					</div>
+					<div>
+						<ul>
+							<li><span class="bold-span">alg: </span>encryption signature</li>
+							<li><span class="bold-span">typ: </span>token type</li>
+							<li><span class="bold-span">cty: </span>content type</li>
+							<li><span class="bold-span">jku: </span>JSON Web Key Set URL</li>
+							<li><span class="bold-span">jwk: </span>JSON Web Key</li>
+							<li><span class="bold-span">kid: </span>Key ID</li>
+							<li><span class="bold-span">x5u: </span>X.509 URL</li>
+							<li><span class="bold-span">x5c: </span>X.509 certificate chain</li>
+							<li><span class="bold-span">x5t: </span>X.509 certificate SHA-1 fingerprint</li>
+							<li><span class="bold-span">crit: </span>critical</li>
+						</ul>
+					</div>
+				</section>
+
+				<section>
+					<h6>Payload</h6>
+					<div>
+						<pre><code data-trim data-noescape>
+							{
+								"sub": "1234567890",
+								"name": "John Doe",
+								"iat": 1516239022
+							}
+							</code></pre>
+					</div>
+					<div>
+						<ul>
+							<li><span class="bold-span">iss: </span>issuer</li>
+							<li><span class="bold-span">sub: </span>subject</li>
+							<li><span class="bold-span">aud: </span>audience</li>
+							<li><span class="bold-span">exp: </span>expiration</li>
+							<li><span class="bold-span">nbf: </span>not before</li>
+							<li><span class="bold-span">jti: </span>JWT ID</li>
+							<li><span class="bold-span">iat: </span>issued at</li>
+						</ul>
+					</div>
+				</section>
+
+				<section>
+					<h6>How do JSON Web Tokens work?</h6>
+					<img data-src="./work-jwt.png" width="800px">
+				</section>
+
+				<section>
+					<h6>Access-refresh token</h6>
+					<img data-src="./access-refresh.png">
+				</section>
+
+				<section>
+					<h6>advantages</h6>
+					<ol>
+						<li>With JWT - there is no need to store additional data about issued sessions: all the servers must check the signature.</li>
+						<li>The server may not create the tokens, but leave them to external services.</li>
+						<li>JSON tokens can store additional useful information about users. This results in better performance. In the case of cookies, it is sometimes necessary to make queries for additional information. With JWT this information can be passed into the token itself.</li>
+						<li>JWT makes it possible to provide simultaneous access to different domains and services.</li>
+					</ol>
+				</section>
+
+				<section>
+					<h6>JWT vulnerability</h6>
+					<ul>
+						<li>Deleting a signature</li>
+						<li>CSRF</li>
+						<li>XSS</li>
+					</ul>
+				</section>
+
+				<section>
+					<h6>The header and payload are signed by the following algorithms:</h6>
+					<ul>
+						<li>Mandatory for all implementations to support:
+							<ol>
+								<li>HMAC using SHA-256 (HS256)</li>
+							</ol>
+						</li>
+						<li>Recommended algorithms:
+							<ol>
+								<li>RSASSA PKCS1 v1.5 using SHA-256 (RS256)</li>
+								<li>ECDSA using P-256 and SHA-256 (ES256)</li>
+							</ol>
+						</li>
+						<li>Variations of the recommended algorithms using SHA-384 and SHA-512 respectively are also supported:
+							<ol>
+								<li>HS384, HS512.</li>
+								<li>RS384, RS512</li>
+								<li>ES384, ES512</li>
+							</ol>
+						</li>
+						<li>Abbreviations in italics are names used in JSON tokens, as described in the JWA specification (RFC 7518)</li>
+					</ul>
+					<p class="text">The specs defines many more algorithms for signing. You can find them all in <a href="https://tools.ietf.org/html/rfc7518#section-3">RFC 7518</a>.</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
